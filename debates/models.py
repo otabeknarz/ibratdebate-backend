@@ -37,6 +37,3 @@ class Ticket(BaseModel):
         if not self.qr_code:
             self.qr_code = create_qr_code(self.id)
         super(Ticket, self).save(*args, **kwargs)
-
-    class Meta:
-        unique_together = ("debate", "user")
