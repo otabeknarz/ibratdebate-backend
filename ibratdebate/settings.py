@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-i9!mld7j4_=u%hf&jsdc4)v9n^+db*oezeitn1fjor-0e4i-*u"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["api.ibratdebate.uz"]
 
 
 # Application definition
