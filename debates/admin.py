@@ -13,5 +13,5 @@ class DebateAdmin(admin.ModelAdmin):
 @admin.register(Ticket)
 class TicketAdmin(admin.ModelAdmin):
     list_display = ("id", "debate", "user", "qr_code", "is_checked")
-    list_filter = ("is_checked",)
+    list_filter = ("is_checked", "debate__region", "debate__district")
     ordering = ("-created_at", "is_checked")
