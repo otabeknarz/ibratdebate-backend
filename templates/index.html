@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    {% for region in regions %}
+        <h2 class="font-bold text-xl text-blue-700 my-2">
+            <a href="{% url "region-statistics" region.id %}">{{ region }}</a>
+        </h2>
+        {% for district in region.districts.all %}
+            <ul class="py-1">
+                <li>
+                    <a class="text-blue-400" href="{% url "district-statistics" district.id %}">{{ district.name }}</a>
+                </li>
+            </ul>
+        {% endfor %}
+    {% endfor %}
+
+{% endblock %}

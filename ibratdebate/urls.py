@@ -20,11 +20,13 @@ from django.urls import path, include
 from django.conf.urls.static import static
 
 from ibratdebate import settings
+from debates import views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/auth/", include("users.api.urls")),
     path("api/core/", include("debates.api.urls")),
+    path("statistics/", include("debates.urls")),
 ]
 
 if settings.DEBUG:

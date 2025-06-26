@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1 class="font-semibold text-xl mb-4">{{ region.name }}</h1>
+    <div class="overflow-x-auto">
+  <table class="min-w-full divide-y divide-gray-200 border border-gray-300 text-sm">
+    <thead class="bg-gray-100">
+      <tr>
+        <th class="px-4 py-2 text-left font-medium text-gray-700">No</th>
+        <th class="px-4 py-2 text-left font-medium text-gray-700">Telegram ID</th>
+        <th class="px-4 py-2 text-left font-medium text-gray-700">Name</th>
+        <th class="px-4 py-2 text-left font-medium text-gray-700">Username</th>
+        <th class="px-4 py-2 text-left font-medium text-gray-700">Phone Number</th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-gray-200">
+      {% for ticket in tickets.all %}
+        <tr class="hover:bg-gray-50">
+          <td class="px-4 py-2">{{ forloop.counter }}</td>
+          <td class="px-4 py-2">{{ ticket.user.id }}</td>
+          <td class="px-4 py-2">{{ ticket.user.first_name }} {% if ticket.user.last_name %}{{ ticket.user.last_name }}{% endif %}</td>
+          <td class="px-4 py-2">
+              {% if not ticket.user.username.isdigit %}
+                  <a class="text-blue-500" target="_blank" href="https://t.me/{{ ticket.user.username }}">@{{ ticket.user.username }}</a>
+              {% endif %}
+          </td>
+          <td class="px-4 py-2">{{ ticket.user.phone }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}
