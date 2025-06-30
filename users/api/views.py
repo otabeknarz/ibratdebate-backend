@@ -36,26 +36,19 @@ class UserViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=["post"])
     def set_password(self, request):
-        self.serializer_class = SetPasswordSerializer
+        serializer = SetPasswordSerializer(data=request.data, context={'request': request})
+        serializer.is_valid(raise_exception=True)
 
         user = request.user
-        current_password = request.data.get("current_password")
-        new_password = request.data.get("password")
-
-        if not current_password or not new_password:
-            return Response(
-                {"detail": "Both 'current_password' and 'password' are required."},
-                status=400,
-            )
+        current_password = serializer.validated_data["current_password"]
+        new_password = serializer.validated_data["password"]
 
         if not user.check_password(current_password):
             return Response({"detail": "Invalid current password."}, status=400)
 
         user.set_password(new_password)
         user.save()
-        return Response(
-            {"detail": "Password has been changed successfully."}, status=200
-        )
+        return Response({"detail": "Password has been changed successfully."}, status=200)
 
 
 class RegionViewSet(viewsets.ModelViewSet):

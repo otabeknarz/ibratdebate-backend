@@ -4,8 +4,8 @@ from users.models import User, Region, District
 
 
 class SetPasswordSerializer(serializers.Serializer):
-    current_password = serializers.CharField(write_only=True)
-    password = serializers.CharField(write_only=True)
+    current_password = serializers.CharField(write_only=True, required=True)
+    password = serializers.CharField(write_only=True, required=True)
 
 
 class RegionSerializer(serializers.ModelSerializer):
