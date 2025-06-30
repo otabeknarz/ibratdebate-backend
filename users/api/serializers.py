@@ -3,6 +3,11 @@ from rest_framework import serializers
 from users.models import User, Region, District
 
 
+class SetPasswordSerializer(serializers.Serializer):
+    current_password = serializers.CharField(write_only=True)
+    password = serializers.CharField(write_only=True)
+
+
 class RegionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Region
