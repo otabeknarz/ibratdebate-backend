@@ -34,7 +34,14 @@ class TicketViewSet(viewsets.ModelViewSet):
     def stats(self, request):
         region = request.query_params.get("region")
         district = request.query_params.get("district")
-        tickets = Ticket.objects.all(region__id=region, district__id=district)
+        if region and district:
+            tickets = Ticket.objects.filter(debate__region_id=region, debate__district_id=district)
+        elif region:
+            tickets = Ticket.objects.filter(debate__region_id=region)
+        elif district:
+            tickets = Ticket.objects.filter(debate__district_id=district)
+        else:
+            tickets = Ticket.objects.all()
         all_count = tickets.count()
         has_come_count = tickets.filter(is_checked=True).count()
         return Response({"all_count": all_count, "has_come_count": has_come_count}, status=200)

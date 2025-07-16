@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-i9!mld7j4_=u%hf&jsdc4)v9n^+db*oezeitn1fjor-0e4i-*u"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["api.ibratdebate.uz", "127.0.0.1", "localhost"]
 
