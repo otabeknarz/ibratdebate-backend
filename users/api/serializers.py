@@ -8,15 +8,16 @@ class SetPasswordSerializer(serializers.Serializer):
     password = serializers.CharField(write_only=True, required=True)
 
 
-class RegionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Region
-        fields = '__all__'
-
-
 class DistrictSerializer(serializers.ModelSerializer):
     class Meta:
         model = District
+        fields = '__all__'
+
+
+class RegionSerializer(serializers.ModelSerializer):
+    districts = DistrictSerializer(many=True, read_only=True)
+    class Meta:
+        model = Region
         fields = '__all__'
 
 
