@@ -25,5 +25,5 @@ class TicketViewSet(viewsets.ModelViewSet):
         filters.OrderingFilter,
         filters.SearchFilter,
     )
-    filterset_fields = ("debate", "user", "is_checked")
+    filterset_fields = ("debate", "debate__region", "user", "is_checked")
     ordering_fields = ("created_at", "is_checked")
