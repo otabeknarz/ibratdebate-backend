@@ -30,9 +30,11 @@ class TicketViewSet(viewsets.ModelViewSet):
     filterset_fields = ("debate", "debate__region", "user", "is_checked")
     ordering_fields = ("created_at", "is_checked")
 
-    @action(detail=False, methods=["get"])
+    @action(detail=False, methods=["get", "post"])
     def stats(self, request):
-        tickets = Ticket.objects.all()
+        region = request.query_params.get("region")
+        district = request.query_params.get("district")
+        tickets = Ticket.objects.all(region__id=region, district__id=district)
         all_count = tickets.count()
         has_come_count = tickets.filter(is_checked=True).count()
         return Response({"all_count": all_count, "has_come_count": has_come_count}, status=200)
