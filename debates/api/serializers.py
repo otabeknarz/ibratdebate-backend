@@ -7,6 +7,7 @@ from users.api.serializers import RegionSerializer, DistrictSerializer, UserSeri
 class DebateSerializer(serializers.ModelSerializer):
     region = RegionSerializer()
     district = DistrictSerializer()
+
     class Meta:
         model = Debate
         fields = '__all__'
@@ -14,6 +15,8 @@ class DebateSerializer(serializers.ModelSerializer):
 
 class TicketSerializer(serializers.ModelSerializer):
     user = UserSerializer()
+    debate = DebateSerializer()
+
     class Meta:
         model = Ticket
         fields = '__all__'
