@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from debates.models import Debate, Ticket
-from users.api.serializers import RegionSerializer, DistrictSerializer
+from users.api.serializers import RegionSerializer, DistrictSerializer, UserSerializer
 
 
 class DebateSerializer(serializers.ModelSerializer):
@@ -13,6 +13,7 @@ class DebateSerializer(serializers.ModelSerializer):
 
 
 class TicketSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
     class Meta:
         model = Ticket
         fields = '__all__'
