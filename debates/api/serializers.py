@@ -13,9 +13,15 @@ class DebateSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class TicketSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
-    debate = DebateSerializer()
+class TicketWriteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Ticket
+        fields = '__all__'
+
+
+class TicketReadSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+    debate = DebateSerializer(read_only=True)
 
     class Meta:
         model = Ticket

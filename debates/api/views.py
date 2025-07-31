@@ -3,7 +3,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 
-from debates.api.serializers import DebateSerializer, TicketSerializer
+from debates.api.serializers import DebateSerializer, TicketReadSerializer, TicketWriteSerializer
 from debates.models import Debate, Ticket
 
 
@@ -21,7 +21,6 @@ class DebateViewSet(viewsets.ModelViewSet):
 
 class TicketViewSet(viewsets.ModelViewSet):
     queryset = Ticket.objects.all()
-    serializer_class = TicketSerializer
     filter_backends = (
         DjangoFilterBackend,
         filters.OrderingFilter,
@@ -29,6 +28,11 @@ class TicketViewSet(viewsets.ModelViewSet):
     )
     filterset_fields = ("debate", "debate__region", "user", "is_checked")
     ordering_fields = ("created_at", "is_checked")
+
+    def get_serializer_class(self):
+        if self.action in ['list', 'retrieve']:
+            return TicketReadSerializer
+        return TicketWriteSerializer
 
     @action(detail=False, methods=["get", "post"])
     def stats(self, request):
