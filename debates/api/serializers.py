@@ -5,7 +5,7 @@ from users.api.serializers import RegionSerializer, RegionSerializerForDebate, D
 
 
 class DebateSerializer(serializers.ModelSerializer):
-    region = RegionSerializer()
+    region = RegionSerializerForDebate()
     district = DistrictSerializer()
 
     class Meta:
