@@ -21,6 +21,12 @@ class RegionSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class RegionSerializerForDebate(serializers.ModelSerializer):
+    class Meta:
+        model = Region
+        fields = '__all__'
+
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User

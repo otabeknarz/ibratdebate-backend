@@ -1,11 +1,11 @@
 from rest_framework import serializers
 
 from debates.models import Debate, Ticket
-from users.api.serializers import RegionSerializer, DistrictSerializer, UserSerializer
+from users.api.serializers import RegionSerializer, RegionSerializerForDebate, DistrictSerializer, UserSerializer
 
 
 class DebateSerializer(serializers.ModelSerializer):
-    region = RegionSerializer()
+    region = RegionSerializerForDebate()
     district = DistrictSerializer()
 
     class Meta:
