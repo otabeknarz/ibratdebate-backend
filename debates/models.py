@@ -1,15 +1,20 @@
 from django.db import models
-from django.conf import settings
+from io import BytesIO
+from django.core.files.base import ContentFile
 import qrcode
 
 from ibratdebate.base_model import BaseModel
 from users.models import User, Region, District, get_random_id
 
 
-def create_qr_code(ticket_id: str):
+def create_qr_code(ticket_id: str) -> ContentFile:
     image = qrcode.make(ticket_id)
-    image.save(str(settings.MEDIA_ROOT / f"{ticket_id}.png"))
-    return f"{ticket_id}.png"
+
+    buffer = BytesIO()
+    image.save(buffer)
+    buffer.seek(0)
+
+    return ContentFile(buffer.read(), name=f"{ticket_id}.png")
 
 
 class Debate(BaseModel):
@@ -27,7 +32,7 @@ class Ticket(BaseModel):
     id = models.CharField(max_length=40, primary_key=True, default=get_random_id)
     debate = models.ForeignKey(Debate, on_delete=models.SET_NULL, null=True, related_name="tickets")
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="tickets")
-    qr_code = models.CharField(max_length=255, null=True, blank=True)
+    qr_code = models.ImageField(upload_to="qr_codes", null=True, blank=True)
     is_checked = models.BooleanField(default=False)
 
     def __str__(self):
@@ -35,5 +40,5 @@ class Ticket(BaseModel):
 
     def save(self, *args, **kwargs):
         if not self.qr_code:
-            self.qr_code = create_qr_code(self.id)
+            self.qr_code = create_qr_code(str(self.id))
         super(Ticket, self).save(*args, **kwargs)
