@@ -32,6 +32,8 @@ DEBUG = os.getenv("DEBUG") == "True"
 
 ALLOWED_HOSTS = ["api.ibratdebate.uz", "127.0.0.1", "localhost"]
 
+CSRF_TRUSTED_ORIGINS = ["https://api.ibratdebate.uz", "http://127.0.0.1:8000"]
+
 
 # Application definition
 
