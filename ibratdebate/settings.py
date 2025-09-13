@@ -11,19 +11,24 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import os
+from dotenv import load_dotenv
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+load_dotenv(BASE_DIR / ".env")
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-i9!mld7j4_=u%hf&jsdc4)v9n^+db*oezeitn1fjor-0e4i-*u"
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DEBUG") == "True"
 
 ALLOWED_HOSTS = ["api.ibratdebate.uz", "127.0.0.1", "localhost"]
 
@@ -41,6 +46,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework_simplejwt",
     "django_filters",
+    "storages",
     # local apps
     "users.apps.UsersConfig",
     "debates.apps.DebatesConfig",
@@ -80,10 +86,9 @@ WSGI_APPLICATION = "ibratdebate.wsgi.application"
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
+    "default": dj_database_url.config(
+        default=os.getenv("DATABASE_URL")
+    )
 }
 
 
@@ -118,15 +123,6 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.2/howto/static-files/
-
-STATIC_URL = "static/"
-STATIC_ROOT = BASE_DIR / "static"
-
-MEDIA_URL = "/media/"
-MEDIA_ROOT = BASE_DIR / "media"
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
@@ -144,3 +140,35 @@ REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
     "PAGE_SIZE": 1000,
 }
+
+AWS_ACCESS_KEY_ID = os.getenv("R2_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = os.getenv("R2_SECRET_ACCESS_KEY")
+AWS_STORAGE_BUCKET_NAME = os.getenv("R2_BUCKET_NAME")
+AWS_S3_ENDPOINT_URL = os.getenv("R2_ENDPOINT_URL")
+AWS_S3_SIGNATURE_VERSION = "s3v4"
+
+# AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.yourdomain.com"
+
+STORAGES = {
+    "default": {
+        "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+        "OPTIONS": {
+            "location": "media",
+            "default_acl": "private",
+            "querystring_auth": True,
+            "querystring_expire": 3600,
+        },
+    },
+    "staticfiles": {
+        "BACKEND": "storages.backends.s3boto3.S3StaticStorage",
+        "OPTIONS": {
+            "location": "static",
+            "default_acl": "private",
+            "querystring_auth": True,
+            "querystring_expire": 3600,
+        },
+    },
+}
+
+STATIC_URL = f"{AWS_S3_ENDPOINT_URL}/static/"
+MEDIA_URL = f"{AWS_S3_ENDPOINT_URL}/media/"
